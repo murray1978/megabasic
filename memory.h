@@ -9,6 +9,9 @@
    28/12/17
     Bitmap for memory will take up to 64Kb for 1 byte minimum size
     Bitmap for memory will take up to 32Kb for 2 byte minimum size
+   29/1/18
+    Linked list of used memory and Linked list of free memory.
+    Memory Size free will never equal actual memory size.
 */
 #pragma once
 #include <Wire.h>
@@ -46,10 +49,11 @@ class _Heap {
 
   private:
     //current size of heap,will be external EEPROM size
-    
     h_uint HeapSize;
     h_uint nextSlot;
     h_uint freeSize;
+
+   
 };
 
 extern _Heap Heap;

@@ -45,6 +45,8 @@ void setup() {
 
   HeapObject<char> cbuf('x');// = new HeapObject<char>('x');
   HeapObject<int>  ibuf(4);// = new HeapObject<int>(4);
+  HeapObject<char> cat = "ralph"; //need to implement in heapObject.h
+  HeapObject<int> catsAge = 4;
 
   Serial.println("Testing heapObjects");
   Serial.print(">cbuf.getValue() = ");

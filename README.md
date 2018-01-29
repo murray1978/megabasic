@@ -12,3 +12,8 @@ Extra memory is provided by a 24LC256 or larger serial EEPROM  and a custom memo
 	- `delete, delete[]`
 	- `new, new[]`
 	- `float, long, unsigned`
+	
+## Issues
+
+ Currently the address of each variable will be stored in ram, the only benefit would be
+ with arrays of floats, integer's and char's.

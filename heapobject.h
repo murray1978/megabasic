@@ -1,22 +1,46 @@
 #pragma once
+/*
+ *  Storing the datatypes,
+ *  These all should brake down into a ganeric template
+*/
 #include "memory.h"
 
 template <typename T>
 class HeapObject
 {
   public:
-    T value;
+    T element;
+    static unsigned int size;
+    static unsigned int length;
+    static unsigned char typeSize;
+    
     HeapObject( T data ) {
-      value = data;
+      typeSize = sizeof(T);
     }
+    HeapObject(){}
     
     T operator +=( T val) {
-      value += val;
+      element += val;
     }
     T operator +( T val ) {
-      value += val;
-      return value;
+      element += val;
+      return element;
     }
+};
+
+template<>
+class HeapObject<float>{
+  private:
+  int element;
+  //memory size
+  static unsigned int size;
+  static unsigned int length;
+  //memory location
+  static unsigned int offset;
+
+  public:
+  HeapObject(){}
+  //Need new, delete, new[], delete[], *
 };
 
 template <>
@@ -25,12 +49,13 @@ class HeapObject<int> {
   private:
     int element;
     //memeroy size
-    unsigned int size;
-    unsigned int length;
+    static unsigned int size;
+    static unsigned int length;
     //memory location
-    unsigned int offset;
+    static unsigned int offset;
 
   public:
+    HeapObject(){}
     HeapObject( int arg )
     {
       //request memory location
@@ -44,32 +69,51 @@ class HeapObject<int> {
       Heap.HeapWriteWord((int)arg, offset);
       //element=arg;
     }
+
+    //Return data at offset
     int get() {
       return (int)Heap.HeapReadWord(offset);
     }
+
+    //set data at offset
     void set( int arg) {
       Heap.HeapWriteWord((int)arg, offset);
     }
+
+    //
     int operator =( int arg ) {
       Heap.HeapWriteWord((int)arg, offset);
     }
+    
+    //
     int operator +=( int arg)
     {
       element = (int)Heap.HeapReadWord(offset) + arg;
       Heap.HeapWriteWord(element, offset);
       return (int)element;
     }
+
+    //
     int operator +( int arg )
     {
       element = (int)Heap.HeapReadWord(offset) + arg;
       return (int)element;
     }
 
+    //
     int operator []( int n )
     {
-      if( n+offset > length) return 0;
+      if( n+offset > length) return 0;//get max memory hole size
       return (int)Heap.HeapReadWord( offset + n );
     }
+
+        //
+    void* operator new[]( int n )
+    {
+      if( n+offset > length) return 0;//get max memory hole size
+      return (void*)Heap.HeapReadWord( offset + n );
+    }
+    //Need new, delete, new[], delete[], *
 };
 
 template <>
@@ -77,9 +121,10 @@ class HeapObject<char> {
   private:
     //char element;
     //memeroy size
-    unsigned int size;
+    static unsigned int size;
     //memory location
-    unsigned int offset;
+    static unsigned int offset;
+    static unsigned int length;
 
   public:
     HeapObject( char arg ) {
@@ -103,5 +148,20 @@ class HeapObject<char> {
     char operator =( char arg ) {
       Heap.HeapWriteByte(arg, offset);
     }
+
+    //Length needs to be asigned
+    int operator []( int n )
+    {
+      if( n+offset > length) return 0; //get max memory hole size
+      return (int)Heap.HeapReadWord( offset + n );
+    }
+    
+    //
+    void* operator new[]( int n )
+    {
+      if( n+offset > length) return 0;//get max memory hole size
+      return (void*)Heap.HeapReadWord( offset + n );
+    }
+    //Need new, delete, new[], delete[], *
 };
 

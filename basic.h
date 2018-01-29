@@ -37,14 +37,13 @@
 //#include <avr/pgmspace.h>
 
 #define SYMSZ	16		 /* SYMBOL SIZE */
-#define PRGSZ	256 //65536  /* PROGRAM SIZE */
-#define STKSZ	126 //256		 /* STACK SIZE */
-#define STRSZ	256 //4096   /* STRING TABLE SIZE */
-#define VARS	128 //512 	 /* VARIABLE COUNT */
+#define PRGSZ	65535    /* PROGRAM SIZE Original 65535*/
+#define STKSZ	256    /* STACK SIZE Original 256*/
+#define STRSZ	4096    /* STRING TABLE SIZE Original 4096*/
+#define VARS	512  	 /* VARIABLE COUNT Original 512*/
 #define LOCS	8			 /* LOCAL COUNT */
-#define lbufSize 128 //256 /*lexical buffer size*/
+#define lbufSize 256  /*lexical buffer size Original 256*/
 
-//Brought forward for Arduino MS 30/11/17
 void err(char *msg);
 void base();
 
@@ -61,18 +60,20 @@ char	*kwd[] = { "AND", "OR", "FORMAT", "SUB", "END", "RETURN", "LOCAL", "WHILE",
                  "RESET" , "RUN", "LIST", 0
               };
 
-char	lbuf[lbufSize], tokn[SYMSZ], *lp;	/* LEXER STATE */
+HeapObject<char> lbuf[lbufSize], tokn[SYMSZ];
+char *lp; 
 int	lnum, tok, tokv, ungot;		/* LEXER STATE */
-int	(*prg[PRGSZ])(), (**pc)(), cpc, lmap[PRGSZ]; /* COMPILED PROGRAM */
-Val	stk[STKSZ], *sp;			/* RUN-TIME STACK */
-Val	value[VARS];			/* VARIABLE VALUES */
-char	name[VARS][SYMSZ];		/* VARIABLE NAMES */
-int	sub[VARS][LOCS + 2];		/* N,LOCAL VAR INDEXES */
-int	mode[VARS];			/* 0=NONE, 1=DIM, 2=SUB */
+int	(*prg[PRGSZ])(), (**pc)(), cpc;
+HeapObject<int> lmap[PRGSZ]; /* COMPILED PROGRAM */
+HeapObject<Val>	stk[STKSZ]; Val  *sp;			/* RUN-TIME STACK */
+HeapObject<Val>	value[VARS];			/* VARIABLE VALUES */
+HeapObject<char>	name[VARS][SYMSZ];		/* VARIABLE NAMES */
+HeapObject<int>	sub[VARS][LOCS + 2];		/* N,LOCAL VAR INDEXES */
+HeapObject<int>	mode[VARS];			/* 0=NONE, 1=DIM, 2=SUB */
 Val	ret;				/* FUNCTION RETURN VALUE */
-int	cstk[STKSZ], *csp;		/* COMPILER STACK */
+HeapObject<int>	cstk[STKSZ]; int *csp;		/* COMPILER STACK */
 int	nvar, cursub, temp, compile, ipc, (**opc)(); /* COMPILER STATE */
-char	stab[STRSZ], *stabp;		/* STRING TABLE */
+HeapObject<char>	stab[STRSZ];char *stabp;		/* STRING TABLE */
 jmp_buf	trap;				/* TRAP ERRORS */
 
 #define A	sp[1]			/* LEFT OPERAND */
