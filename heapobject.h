@@ -1,7 +1,9 @@
 #pragma once
 /*
  *  Storing the datatypes,
- *  These all should brake down into a ganeric template
+ *   
+ *   TODO:
+ *    Reduce all down to a single template <typename T>
 */
 #include "memory.h"
 
