@@ -17,3 +17,7 @@ Extra memory is provided by a 24LC256 or larger serial EEPROM  and a custom memo
 
  Currently the address of each variable will be stored in ram, the only benefit would be
  with arrays of floats, integer's and char's.
+ 
+ ## Future
+  In reality the memory management side of things could be extracted into a usefull libarary for small devices that have a 
+  small memory footprint but need to access large array's of data.
